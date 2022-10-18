@@ -1,3 +1,3 @@
 export default {
-[1001]:{ID: 1001, Name: "Lee", Hobby: ["movie","music"], Salary: 32.1, Pets: {PetName: "cat", PetAge: 22}},
+[1001]:{ID: 1001, name: "Lee", hobby: ["movie","music"], salary: 32.1, pets: {petName: "cat", petAge: 22}},
 }

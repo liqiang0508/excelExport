@@ -168,4 +168,4 @@ for dirPath, dirNames, filenames in os.walk(xlsDir):  # 遍历目录下的所有
 #     f.close()
 
 print("Build success**************************************************")
-os.system("pause")
+# os.system("pause")
