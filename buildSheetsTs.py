@@ -6,7 +6,7 @@ import os
 import shutil
 import xlrd
 import json
-
+from collections import OrderedDict
 
 def MoveFile(srcfile, dstfile):  # 移动文件
     if not os.path.isfile(srcfile):
@@ -38,7 +38,6 @@ def export2Lua(path):
             os.remove(outFilename)
 
         writeStr = "export default {\n"
-        # writeStr = writeStr + "var Config = {\n"
 
         workbook = xlrd.open_workbook(path)  # 读取excel文件
         sheets = workbook.sheets()
@@ -48,7 +47,7 @@ def export2Lua(path):
         startRow = 11  # 开始行数
         length = 0
         for row in range(startRow, MaxRow):
-            rowData = {}
+            rowData = OrderedDict()
             length = length + 1
             for i in range(0, MaxCol):
                 key_type = sheet.cell(10, i).value  # 字段类型
@@ -105,12 +104,7 @@ def export2Lua(path):
 
             # 每一行数据处理
             rowStr1 = json.dumps(rowData)
-            # print("rowStr1==", rowStr1)
             rowStr1 = rowStr1.replace("\"", "")
-            # rowStr1 = rowStr1.replace("[", "{")
-            # rowStr1 = rowStr1.replace("]", "}")
-            # # rowStr1 = rowStr1.replace(":", "=")
-            # rowStr1 = rowStr1.replace(" ", "")
             rowStr1 = rowStr1.replace("///", "\"")
             rowStr1 = rowStr1.replace("\\", "\"")
             key = str(rowData["ID"])
@@ -120,17 +114,8 @@ def export2Lua(path):
 
         writeStr = writeStr + "}\n"
 
-        # commonFunction
-        # commFunStr = ""
-        # with open("commonFun.txt", "r") as F:
-        #     commFunStr = F.read()
-        #     F.close()
-        # commFunStr = commFunStr % (length, luaModuleName, luaModuleName)
-        # writeStr = writeStr + commFunStr
-        # write
-        # writeStr = writeStr + "\nreturn " + "Config;"
         outFilename = tsDir + "/" + outFilename
-        with open(outFilename, "w",encoding="utf-8") as f:
+        with open(outFilename, "w") as f:
             f.write(writeStr)
             f.close()
 
@@ -151,21 +136,5 @@ for dirPath, dirNames, filenames in os.walk(xlsDir):  # 遍历目录下的所有
             print("Export2TS========>" + path)
         else:
             print("Error %s is not .xls" % (path))
-
-# luaConifg = "var Config = {}\n"
-# for dirPath, dirNames, filenames in os.walk(tsDir):  # 遍历目录下的所有lua文件
-#     for file in filenames:
-#         # print("file==", file,os.path.splitext(file))
-#         config = "Config.{} = require(\"app.config.{}\")\n".format(
-#             os.path.splitext(file)[0],
-#             os.path.splitext(file)[0])
-#         luaConifg = luaConifg + config
-
-# luaConifg = luaConifg + "return Config"
-
-# with open(tsDir + "/Config.ts", "w") as f:
-#     f.write(luaConifg)
-#     f.close()
-
 print("Build success**************************************************")
-# os.system("pause")
+os.system("pause")
